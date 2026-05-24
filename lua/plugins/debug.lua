@@ -42,6 +42,8 @@ require('mason-nvim-dap').setup {
   ensure_installed = {
     -- Update this to ensure that you have the debuggers for the langs you want
     'delve',
+    'debugpy',
+    'lua',
   },
 }
 
@@ -91,5 +93,26 @@ require('dap-go').setup {
     -- On Windows delve must be run attached or it crashes.
     -- See https://github.com/leoluz/nvim-dap-go/blob/main/README.md#configuring
     detached = vim.fn.has 'win32' == 0,
+  },
+}
+
+dap.configurations.python = {
+  {
+    type = 'python',
+    request = 'launch',
+    name = 'Launch Active File (Miniforge/Conda)',
+    program = '${file}',
+    pythonPath = function()
+      if vim.env.CONDA_PREFIX then return vim.env.CONDA_PREFIX .. '/bin/python' end
+
+      local cwd = vim.fn.getcwd()
+      if vim.fn.executable(cwd .. '/venv/bin/python') == 1 then
+        return cwd .. '/venv/bin/python'
+      elseif vim.fn.executable(cwd .. '/.venv/bin/python') == 1 then
+        return cwd .. '/.venv/bin/python'
+      end
+
+      return '/usr/bin/python3'
+    end,
   },
 }

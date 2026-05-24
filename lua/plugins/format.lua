@@ -6,6 +6,7 @@ require('conform').setup {
     local enabled_filetypes = {
       lua = true,
       python = true,
+      markdown = true,
     }
     if enabled_filetypes[vim.bo[bufnr].filetype] then
       return { timeout_ms = 500 }
@@ -24,6 +25,7 @@ require('conform').setup {
     --
     -- You can use 'stop_after_first' to run the first available formatter from the list
     javascript = { 'prettierd', 'prettier', stop_after_first = true },
+    markdown = { 'prettierd', 'prettier', stop_after_first = true },
   },
 }
 
